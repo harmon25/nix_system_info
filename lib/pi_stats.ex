@@ -67,9 +67,10 @@ defmodule PiStats do
          end)
   end
 
-  def ram() do 
+  def memory() do 
     result =  Porcelain.exec("free", ["-mo"])
-    lst = result.out |> String.strip() |> String.split("\n") |> Enum.map(fn x -> String.split(x) end) |> tl() |> hd()
+    result_tpl = result.out |> String.strip() |> String.split("\n") |> Enum.map(fn x -> String.split(x) end) |> tl() |> hd() |> List.to_tuple()
+    %{free: elem(result_tpl,3), total: elem(result_tpl,1), used: elem(result_tpl,2) }
   end
 
 end
