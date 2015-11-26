@@ -25,7 +25,7 @@ defmodule PiStats do
      |> String.strip()
      |> String.replace("load average:", "")
      |> String.split(",")   
-   result_tpl =   List.to_tuple(split_result)
+   result_tpl = List.to_tuple(split_result)
    tuple_len = tuple_size(result_tpl)
    cond do
      tuple_len == 5 ->
