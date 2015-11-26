@@ -9,8 +9,8 @@ defmodule SysInfo do
 
   ## Examples:
     
-    iex> SysInfo.hostname
-    {:ok, "hostname"}
+      iex> SysInfo.hostname
+      {:ok, "hostname"}
   
   """
   def hostname() do
@@ -24,8 +24,8 @@ defmodule SysInfo do
 
   ## Examples:
 
-    iex> SysInfo.connections
-    {:ok, INT}
+      iex> SysInfo.connections
+      {:ok, INT}
 
   """
   def connections() do
@@ -39,8 +39,8 @@ defmodule SysInfo do
 
   ## Examples:
 
-    iex> SysInfo.net_stats "wlan0"
-    {:ok, %{down: INT, up: INT, total: INT}}
+      iex> SysInfo.net_stats "wlan0"
+      {:ok, %{down: INT, up: INT, total: INT}}
   
   """
   def net_stats(interface \\ "eth0") do
@@ -59,8 +59,8 @@ defmodule SysInfo do
 
   ## Examples:
 
-    iex> SysInfo.uptime
-    {:ok, %{hours: a}}
+      iex> SysInfo.uptime
+      {:ok, %{hours: a}}
 
   """
   def uptime() do
@@ -90,8 +90,8 @@ defmodule SysInfo do
 
   ## Examples:
 
-    iex> SysInfo.load
-    {:ok, %{load_1: a, load_5: b, load_15: c} }
+      iex> SysInfo.load
+      {:ok, %{load_1: a, load_5: b, load_15: c} }
 
   """
   def load() do
@@ -112,8 +112,8 @@ defmodule SysInfo do
 
   ## Examples:
 
-    iex> SysInfo.disks
-    {:ok, []}
+      iex> SysInfo.disks
+      {:ok, []}
 
   """
   def disks() do
@@ -131,8 +131,8 @@ defmodule SysInfo do
   
   ## Examples:
 
-    iex> SysInfo.memory
-    {:ok, %{free: a, total: b, used: c}}
+      iex> SysInfo.memory
+      {:ok, %{free: a, total: b, used: c}}
 
   """
   def memory() do 

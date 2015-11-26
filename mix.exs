@@ -14,7 +14,7 @@ defmodule SysInfo.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger,:porcelain]]
+    [applications: [:logger,:porcelain, :os_utils]]
   end
 
   # Dependencies can be Hex packages:
@@ -27,6 +27,8 @@ defmodule SysInfo.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    [{:porcelain, "~> 2.0"}]
+    [ {:porcelain, "~> 2.0"}
+    , {:os_utils. "~> 0.1.3"}
+    ]
   end
 end
