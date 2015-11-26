@@ -27,22 +27,22 @@ defmodule PiStats do
      |> String.split(",")   
    result_tpl = List.to_tuple(split_result)
    tuple_len = tuple_size(result_tpl)
-   [load_1,load_5,load_15] = [elem(result_tpl, tuple_len-3),elem(result_tpl, tuple_len-2), elem(result_tpl,tuple_len-1) ] 
    cond do
      tuple_len == 5 ->
-       "up for hours"
+       IO.puts "up for hours!"
        hours = elem(result_tpl, 0)
              |> String.split()
              |> List.last()
        %{hours: hours}
      tuple_len == 6 ->
-       "up for days"
+        IO.puts "up for days!"
         hours = elem(result_tpl, 1)
               |> String.strip()
+
         days = elem(result_tpl, 0)
               |> String.replace("days", "")
               |> String.split()
-              |> String.last()
+              |> List.last()
               |> String.strip()
      %{hours: hours, days: days } 
    end  
