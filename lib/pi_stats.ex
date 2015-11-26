@@ -33,7 +33,8 @@ defmodule PiStats do
        hours = elem(result_tpl, 0)
              |> String.split()
              |> List.last()
-     %{uptime: %{hours: hours}, load:%{1: elem(result_tpl,tuple_len-3 ) ,5: elem(result_tpl,tuple_len-2 ), 15: elem(result_tpl,tuple_len-1 )}}
+       [load_1,load_5,load_15] = [elem(result_tpl, tuple_len-3),elem(result_tpl, tuple_len-2), elem(result_tpl,tuple_len-1) ] 
+       %{uptime: %{hours: hours}, load:%{1: load_1 , 5: load_5 , 15: load_15 } }
      tuple_len == 6 ->
        "up for days"
        result_tpl
