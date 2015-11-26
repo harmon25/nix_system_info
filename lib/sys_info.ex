@@ -6,22 +6,36 @@ defmodule SysInfo do
 
   @doc """
   Returns hostname as string
+
+  Example:
+    iex> SysInfo.hostname
+    {:ok, "hostname"}
   """
   def hostname() do
     result =  Porcelain.exec("hostname", ["-f"])
-    result.out |> String.strip()
+    final_result = result.out |> String.strip()
+    {:ok, final_result}
   end
   
   @doc """
   Returns number of current tcp connetions as an int
+
+  Example:
+    iex> SysInfo.connections
+    {:ok, INT}
   """
   def connections() do
     result = Porcelain.shell("netstat -nta --inet | wc -l")
-    result.out |> String.strip() |> String.to_integer()
+    final_result = result.out |> String.strip() |> String.to_integer()
+    {:ok, final_result}
   end
  
   @doc """
   Returns number of current tcp connetions as an int
+
+  Example:
+    iex> SysInfo.net_stats "wlan0"
+    {:ok, %{down: INT, up: INT, total: INT}}
   """
   def net_stats(interface \\ "eth0") do
     result = Porcelain.shell("/sbin/ifconfig #{interface} | grep RX\\ bytes")
@@ -31,11 +45,15 @@ defmodule SysInfo do
       |> List.to_tuple()
 
     data = %{down: String.to_integer(elem(result_tuple, 1)), up: String.to_integer(elem(result_tuple, 5)), total: 0} 
-    %{data | :total => data.down + data.up }
+    {:ok, %{data | :total => data.down + data.up } }
   end
 
   @doc """
-  Uptime as Map: %{days: x, hours: y} 
+  Uptime as Map
+
+  Example:
+    iex> SysInfo.uptime
+    {:ok, %{hours: a}}
   """
   def uptime() do
    result =  Porcelain.shell("uptime")
@@ -45,8 +63,7 @@ defmodule SysInfo do
       tuple_len == 5 ->
       # up for hours
         hours = elem(result_tpl, 0) |> String.split() |> List.last()
-        %{hours: hours}
-     
+      {:ok , %{hours: hours} }
       tuple_len == 6 ->
       # up for days
         hours = elem(result_tpl, 1) |> String.strip()
@@ -55,13 +72,17 @@ defmodule SysInfo do
           |> String.split()
           |> List.last()
           |> String.strip()
-
-        %{hours: hours, days: days } 
+        final_result = %{hours: hours, days: days }
+        {:ok, final_result}
     end  
   end
 
   @doc """
   Returns load averages for last 1, 5 and 15 minutes as floats
+
+  Example:
+    iex> SysInfo.load
+    {:ok, %{load_1: a, load_5: b, load_15: c} }
   """
   def load() do
     result =  Porcelain.shell("uptime")
@@ -72,11 +93,16 @@ defmodule SysInfo do
       |> List.to_tuple()
     tuple_len = tuple_size(result_tpl)
     [load_1,load_5,load_15] = [String.strip(elem(result_tpl, tuple_len-3)),String.strip(elem(result_tpl, tuple_len-2)), String.strip(elem(result_tpl,tuple_len-1))] 
-    %{load_1: String.to_float(load_1) , load_5: String.to_float(load_5) , load_15: String.to_float(load_15) }
+    final_result = %{load_1: String.to_float(load_1) , load_5: String.to_float(load_5) , load_15: String.to_float(load_15) }
+    {:ok, final_result }
   end
 
   @doc """
   Returns List of mounted file systems
+
+  Example:
+    iex> SysInfo.disks
+    {:ok, []}
   """
   def disks() do
     res = Porcelain.shell("df -T | grep -vE \"tmpfs|rootfs|Filesystem\"")
@@ -90,11 +116,15 @@ defmodule SysInfo do
 
   @doc """
   Returns Map of memory stats as integers
+  Example:
+    iex> SysInfo.memory
+    {:ok, %{free: a, total: b, used: c}}
   """
   def memory() do 
     result =  Porcelain.exec("free", ["-mo"])
     result_tpl = result.out |> String.strip() |> String.split("\n") |> Enum.map(fn x -> String.split(x) end) |> tl() |> hd() |> List.to_tuple()
-    %{free: String.to_integer(elem(result_tpl,3)), total: String.to_integer(elem(result_tpl,1)), used: String.to_integer(elem(result_tpl,2)) }
+    final_result = %{free: String.to_integer(elem(result_tpl,3)), total: String.to_integer(elem(result_tpl,1)), used: String.to_integer(elem(result_tpl,2)) }
+    {:ok, final_result }
   end
 
 end
