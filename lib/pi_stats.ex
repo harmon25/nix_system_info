@@ -24,8 +24,8 @@ defmodule PiStats do
   @doc """
   Returns number of current tcp connetions as an int
   """
-  def net_stats(int) do
-    result = Porcelain.shell("/sbin/ifconfig #{int} | grep RX\\ bytes")
+  def net_stats(interface \\ "eth0") do
+    result = Porcelain.shell("/sbin/ifconfig #{interface} | grep RX\\ bytes")
     result_tuple = result.out
       |> String.replace("bytes:","")
       |> String.split()
