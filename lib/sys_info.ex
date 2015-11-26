@@ -7,7 +7,7 @@ defmodule SysInfo do
   @doc """
   Returns hostname as string
 
-  Example:
+  ## Examples
     iex> SysInfo.hostname
     {:ok, "hostname"}
   """
@@ -20,7 +20,7 @@ defmodule SysInfo do
   @doc """
   Returns number of current tcp connetions as an int
 
-  Example:
+  ## Examples
     iex> SysInfo.connections
     {:ok, INT}
   """
@@ -33,7 +33,7 @@ defmodule SysInfo do
   @doc """
   Returns number of current tcp connetions as an int
 
-  Example:
+  ## Examples
     iex> SysInfo.net_stats "wlan0"
     {:ok, %{down: INT, up: INT, total: INT}}
   """
@@ -51,7 +51,7 @@ defmodule SysInfo do
   @doc """
   Uptime as Map
 
-  Example:
+  ## Examples
     iex> SysInfo.uptime
     {:ok, %{hours: a}}
   """
@@ -80,7 +80,7 @@ defmodule SysInfo do
   @doc """
   Returns load averages for last 1, 5 and 15 minutes as floats
 
-  Example:
+  ## Examples
     iex> SysInfo.load
     {:ok, %{load_1: a, load_5: b, load_15: c} }
   """
@@ -100,7 +100,7 @@ defmodule SysInfo do
   @doc """
   Returns List of mounted file systems
 
-  Example:
+  ## Examples
     iex> SysInfo.disks
     {:ok, []}
   """
@@ -116,7 +116,8 @@ defmodule SysInfo do
 
   @doc """
   Returns Map of memory stats as integers
-  Example:
+  
+  ## Examples
     iex> SysInfo.memory
     {:ok, %{free: a, total: b, used: c}}
   """
