@@ -1,4 +1,4 @@
-defmodule PiStats do
+defmodule SysInfo do
   @moduledoc """
   Provides Pi System Stats
   """

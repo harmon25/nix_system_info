@@ -1,4 +1,4 @@
-defmodule PiStatsTest do
+defmodule SysInfoTest do
   use ExUnit.Case
 
   test "the truth" do

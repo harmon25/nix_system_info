@@ -1,8 +1,8 @@
-defmodule PiStats.Mixfile do
+defmodule SysInfo.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :pi_stats,
+    [app: :sys_info,
      version: "0.0.1",
      elixir: "~> 1.0",
      build_embedded: Mix.env == :prod,
@@ -14,7 +14,7 @@ defmodule PiStats.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger,:porcelain ]]
+    [applications: [:logger,:porcelain]]
   end
 
   # Dependencies can be Hex packages:
