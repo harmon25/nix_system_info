@@ -57,4 +57,14 @@ defmodule PiStats do
     %{load_1: load_1 , load_5: load_5 , load_15: load_15 }
   end
 
+  def disks() do
+    res = Porcelain.shell("df -T | grep -vE \"tmpfs|rootfs|Filesystem\"")
+    disk_stats = res.out 
+      |> String.strip()
+      |> String.split("\n")
+      |> Enum.map(fn x -> 
+          String.split(x) 
+         end)
+  end
+
 end
