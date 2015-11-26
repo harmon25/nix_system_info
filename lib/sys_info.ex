@@ -66,7 +66,7 @@ defmodule SysInfo do
       data = %{down: String.to_integer(elem(result_tuple, 1)), 
                up: String.to_integer(elem(result_tuple, 5)), 
                total: 0} 
-               
+
       {:ok, %{data | :total => data.down + data.up } }
     else
         {:err, %{msg: @genericError}}
@@ -131,9 +131,9 @@ defmodule SysInfo do
                                String.strip(elem(result_tpl, tuple_len-2)), 
                                String.strip(elem(result_tpl,tuple_len-1))] 
 
-    final_result = %{load_1: String.to_float(load_1), 
-                     load_5: String.to_float(load_5), 
-                     load_15: String.to_float(load_15)
+    final_result = %{load_1: String.to_float(load_1) * 100, 
+                     load_5: String.to_float(load_5)  * 100, 
+                     load_15: String.to_float(load_15) * 100
                     }
     {:ok, final_result }
    else
@@ -162,8 +162,8 @@ defmodule SysInfo do
       |> Enum.map(fn diskInfo ->
           %{device: elem(diskInfo,0),
             type: elem(diskInfo,1), 
-            size: elem(diskInfo,2), 
-            capacity: elem(diskInfo,5), 
+            size: String.to_integer(elem(diskInfo,2)), 
+            capacity: String.to_integer(String.rstrip(elem(diskInfo,5), "%")), 
             mountpoint: elem(diskInfo,6)
            }
          end)
