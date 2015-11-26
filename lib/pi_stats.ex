@@ -2,7 +2,6 @@ defmodule PiStats do
   @moduledoc """
   Provides Pi System Stats
   """
-  
   use Application
 
   @doc """
@@ -43,14 +42,14 @@ defmodule PiStats do
    result_tpl = result.out |> String.strip() |> String.split(",") |> List.to_tuple()  
    tuple_len = tuple_size(result_tpl)
     cond do
-    # up for hours
       tuple_len == 5 ->
+      # up for hours
         hours = elem(result_tpl, 0) |> String.split() |> List.last()
         %{hours: hours}
-     # up for days
+     
       tuple_len == 6 ->
+      # up for days
         hours = elem(result_tpl, 1) |> String.strip()
-
         days = elem(result_tpl, 0)
           |> String.replace("days", "")
           |> String.split()
@@ -62,7 +61,7 @@ defmodule PiStats do
   end
 
   @doc """
-  Returns load averages for last 1, 5 and 15 minutes
+  Returns load averages for last 1, 5 and 15 minutes as floats
   """
   def load() do
     result =  Porcelain.shell("uptime")
@@ -73,7 +72,7 @@ defmodule PiStats do
       |> List.to_tuple()
     tuple_len = tuple_size(result_tpl)
     [load_1,load_5,load_15] = [String.strip(elem(result_tpl, tuple_len-3)),String.strip(elem(result_tpl, tuple_len-2)), String.strip(elem(result_tpl,tuple_len-1))] 
-    %{load_1: load_1 , load_5: load_5 , load_15: load_15 }
+    %{load_1: String.to_float(load_1) , load_5: String.to_float(load_5) , load_15: String.to_float(load_15) }
   end
 
   @doc """
@@ -90,12 +89,12 @@ defmodule PiStats do
   end
 
   @doc """
-  Returns Map of memory stats
+  Returns Map of memory stats as integers
   """
   def memory() do 
     result =  Porcelain.exec("free", ["-mo"])
     result_tpl = result.out |> String.strip() |> String.split("\n") |> Enum.map(fn x -> String.split(x) end) |> tl() |> hd() |> List.to_tuple()
-    %{free: elem(result_tpl,3), total: elem(result_tpl,1), used: elem(result_tpl,2) }
+    %{free: String.to_integer(elem(result_tpl,3)), total: String.to_integer(elem(result_tpl,1)), used: String.to_integer(elem(result_tpl,2)) }
   end
 
 end
