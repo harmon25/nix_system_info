@@ -8,8 +8,10 @@ defmodule SysInfo do
   Returns hostname as string
 
   ## Examples
+    
     iex> SysInfo.hostname
     {:ok, "hostname"}
+  
   """
   def hostname() do
     result =  Porcelain.exec("hostname", ["-f"])
@@ -21,8 +23,10 @@ defmodule SysInfo do
   Returns number of current tcp connetions as an int
 
   ## Examples
+    
     iex> SysInfo.connections
     {:ok, INT}
+
   """
   def connections() do
     result = Porcelain.shell("netstat -nta --inet | wc -l")
@@ -34,8 +38,10 @@ defmodule SysInfo do
   Returns number of current tcp connetions as an int
 
   ## Examples
+
     iex> SysInfo.net_stats "wlan0"
     {:ok, %{down: INT, up: INT, total: INT}}
+  
   """
   def net_stats(interface \\ "eth0") do
     result = Porcelain.shell("/sbin/ifconfig #{interface} | grep RX\\ bytes")
@@ -52,8 +58,10 @@ defmodule SysInfo do
   Uptime as Map
 
   ## Examples
+
     iex> SysInfo.uptime
     {:ok, %{hours: a}}
+
   """
   def uptime() do
    result =  Porcelain.shell("uptime")
@@ -81,8 +89,10 @@ defmodule SysInfo do
   Returns load averages for last 1, 5 and 15 minutes as floats
 
   ## Examples
+
     iex> SysInfo.load
     {:ok, %{load_1: a, load_5: b, load_15: c} }
+
   """
   def load() do
     result =  Porcelain.shell("uptime")
@@ -101,8 +111,10 @@ defmodule SysInfo do
   Returns List of mounted file systems
 
   ## Examples
+
     iex> SysInfo.disks
     {:ok, []}
+
   """
   def disks() do
     res = Porcelain.shell("df -T | grep -vE \"tmpfs|rootfs|Filesystem\"")
@@ -118,8 +130,10 @@ defmodule SysInfo do
   Returns Map of memory stats as integers
   
   ## Examples
+
     iex> SysInfo.memory
     {:ok, %{free: a, total: b, used: c}}
+
   """
   def memory() do 
     result =  Porcelain.exec("free", ["-mo"])
