@@ -27,18 +27,38 @@ defmodule PiStats do
      |> String.split(",")   
    result_tpl = List.to_tuple(split_result)
    tuple_len = tuple_size(result_tpl)
+   [load_1,load_5,load_15] = [elem(result_tpl, tuple_len-3),elem(result_tpl, tuple_len-2), elem(result_tpl,tuple_len-1) ] 
    cond do
      tuple_len == 5 ->
        "up for hours"
        hours = elem(result_tpl, 0)
              |> String.split()
              |> List.last()
-       [load_1,load_5,load_15] = [elem(result_tpl, tuple_len-3),elem(result_tpl, tuple_len-2), elem(result_tpl,tuple_len-1) ] 
-       %{uptime: %{hours: hours}, load: %{l1: load_1 , l5: load_5 , l15: load_15 } }
+       %{hours: hours}
      tuple_len == 6 ->
        "up for days"
-       result_tpl
+        hours = elem(result_tpl, 1)
+              |> String.strip()
+        days = elem(result_tpl, 0)
+              |> String.replace("days", "")
+              |> String.split()
+              |> String.last()
+              |> String.strip()
+     %{hours: hours, days: days } 
    end  
-end
+ end
+
+ def load() do
+    result =  Porcelain.shell("uptime")
+    split_result = 
+     result.out
+     |> String.strip()
+     |> String.replace("load average:", "")
+     |> String.split(",")
+    result_tpl = List.to_tuple(split_result)
+    tuple_len = tuple_size(result_tpl)
+    [load_1,load_5,load_15] = [String.strip(elem(result_tpl, tuple_len-3)),String.strip(elem(result_tpl, tuple_len-2)), String.strip(elem(result_tpl,tuple_len-1))] 
+    %{load_1: load_1 , load_5: load_5 , load_15: load_15 }
+ end
 
 end
