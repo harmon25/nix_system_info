@@ -1,16 +1,29 @@
 defmodule PiStats do
+  @moduledoc """
+  Provides Pi System Stats
+  """
+  
   use Application
 
+  @doc """
+  Returns hostname as string
+  """
   def hostname() do
     result =  Porcelain.exec("hostname", ["-f"])
     result.out |> String.strip()
   end
-
+  
+  @doc """
+  Returns number of current tcp connetions as an int
+  """
   def connections() do
     result = Porcelain.shell("netstat -nta --inet | wc -l")
     result.out |> String.strip() |> String.to_integer()
   end
  
+  @doc """
+  Returns number of current tcp connetions as an int
+  """
   def net_stats(int) do
     result = Porcelain.shell("/sbin/ifconfig #{int} | grep RX\\ bytes")
     result_tuple = result.out
@@ -22,6 +35,9 @@ defmodule PiStats do
     %{data | :total => data.down + data.up }
   end
 
+  @doc """
+  Uptime as Map: %{days: x, hours: y} 
+  """
   def uptime() do
    result =  Porcelain.shell("uptime")
    result_tpl = result.out |> String.strip() |> String.split(",") |> List.to_tuple()  
@@ -45,6 +61,9 @@ defmodule PiStats do
     end  
   end
 
+  @doc """
+  Returns load averages for last 1, 5 and 15 minutes
+  """
   def load() do
     result =  Porcelain.shell("uptime")
     result_tpl = result.out
@@ -57,6 +76,9 @@ defmodule PiStats do
     %{load_1: load_1 , load_5: load_5 , load_15: load_15 }
   end
 
+  @doc """
+  Returns List of mounted file systems
+  """
   def disks() do
     res = Porcelain.shell("df -T | grep -vE \"tmpfs|rootfs|Filesystem\"")
     disk_stats = res.out 
@@ -67,6 +89,9 @@ defmodule PiStats do
          end)
   end
 
+  @doc """
+  Returns Map of memory stats
+  """
   def memory() do 
     result =  Porcelain.exec("free", ["-mo"])
     result_tpl = result.out |> String.strip() |> String.split("\n") |> Enum.map(fn x -> String.split(x) end) |> tl() |> hd() |> List.to_tuple()
