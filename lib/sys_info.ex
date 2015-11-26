@@ -131,9 +131,9 @@ defmodule SysInfo do
                                String.strip(elem(result_tpl, tuple_len-2)), 
                                String.strip(elem(result_tpl,tuple_len-1))] 
 
-    final_result = %{load_1: String.to_float(load_1) * 100, 
-                     load_5: String.to_float(load_5)  * 100, 
-                     load_15: String.to_float(load_15) * 100
+    final_result = %{load_1: Float.round(String.to_float(load_1) * 100), 
+                     load_5: Float.round(String.to_float(load_5)  * 100), 
+                     load_15: Float.round(String.to_float(load_15) * 100)
                     }
     {:ok, final_result }
    else
