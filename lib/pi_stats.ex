@@ -63,8 +63,13 @@ defmodule PiStats do
       |> String.strip()
       |> String.split("\n")
       |> Enum.map(fn x -> 
-          String.split(x) 
+          String.split(x) |> List.to_tuple()
          end)
+  end
+
+  def ram() do 
+    result =  Porcelain.exec("free", ["-mo"])
+    lst = result.out |> String.strip() |> String.split("\n") |> Enum.map(fn x -> String.split(x) end) |> tl() |> hd()
   end
 
 end
