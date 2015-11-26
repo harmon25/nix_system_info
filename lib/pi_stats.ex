@@ -3,13 +3,12 @@ defmodule PiStats do
 
  def hostname() do
   result =  Porcelain.exec("hostname", ["-f"])
-  %{hostname: String.strip(result.out)}
+  result.out |> String.strip()
  end
 
  def connections() do
   result = Porcelain.shell("netstat -nta --inet | wc -l")
-  IO.inspect 
-  %{connections: String.strip(result.out)}
+  result.out |> String.strip() |> String.to_integer()
  end
  
  def net_stats(int) do
