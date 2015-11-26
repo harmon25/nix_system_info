@@ -63,7 +63,10 @@ defmodule SysInfo do
         |> String.split()
         |> List.to_tuple()
 
-      data = %{down: String.to_integer(elem(result_tuple, 1)), up: String.to_integer(elem(result_tuple, 5)), total: 0} 
+      data = %{down: String.to_integer(elem(result_tuple, 1)), 
+               up: String.to_integer(elem(result_tuple, 5)), 
+               total: 0} 
+               
       {:ok, %{data | :total => data.down + data.up } }
     else
         {:err, %{msg: @genericError}}
@@ -123,8 +126,15 @@ defmodule SysInfo do
       |> String.split(",")
       |> List.to_tuple()
     tuple_len = tuple_size(result_tpl)
-    [load_1,load_5,load_15] = [String.strip(elem(result_tpl, tuple_len-3)),String.strip(elem(result_tpl, tuple_len-2)), String.strip(elem(result_tpl,tuple_len-1))] 
-    final_result = %{load_1: String.to_float(load_1) , load_5: String.to_float(load_5) , load_15: String.to_float(load_15) }
+
+    [load_1,load_5,load_15] = [String.strip(elem(result_tpl, tuple_len-3)), 
+                               String.strip(elem(result_tpl, tuple_len-2)), 
+                               String.strip(elem(result_tpl,tuple_len-1))] 
+
+    final_result = %{load_1: String.to_float(load_1), 
+                     load_5: String.to_float(load_5), 
+                     load_15: String.to_float(load_15)
+                    }
     {:ok, final_result }
    else
        {:err, %{msg: @genericError}}
@@ -149,6 +159,14 @@ defmodule SysInfo do
       |> Enum.map(fn x -> 
           String.split(x) |> List.to_tuple()
          end)
+      |> Enum.map(fn diskInfo ->
+          %{device: elem(diskInfo,0),
+            type: elem(diskInfo,1), 
+            size: elem(diskInfo,2), 
+            capacity: elem(diskInfo,5), 
+            mountpoint: elem(diskInfo,6)
+           }
+         end)
       {:ok, disk_stats }
     else
        {:err, %{msg: @genericError}}
@@ -168,7 +186,10 @@ defmodule SysInfo do
     if OSUtils.is_unix? do
       result =  Porcelain.exec("free", ["-mo"])
       result_tpl = result.out |> String.strip() |> String.split("\n") |> Enum.map(fn x -> String.split(x) end) |> tl() |> hd() |> List.to_tuple()
-      final_result = %{free: String.to_integer(elem(result_tpl,3)), total: String.to_integer(elem(result_tpl,1)), used: String.to_integer(elem(result_tpl,2)) }
+      final_result = %{free: String.to_integer(elem(result_tpl,3)), 
+                       total: String.to_integer(elem(result_tpl,1)),
+                       used: String.to_integer(elem(result_tpl,2))
+                      }
       {:ok, final_result }
     else
       {:err, %{msg: @genericError}}
