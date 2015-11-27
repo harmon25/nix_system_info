@@ -186,7 +186,7 @@ defmodule SysInfo do
   end
 
   defp test_zero(f) when f < 1 do 0 end
-  defp test_zero(f) do f end
+  defp test_zero(f) do round(f) end
 
   defp convertUptime(seconds) do
     %{
