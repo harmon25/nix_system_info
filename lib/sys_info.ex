@@ -113,15 +113,12 @@ defmodule SysInfo do
       |> String.replace("load average:", "")
       |> String.split(",")
       |> List.to_tuple()
+      
     tuple_len = tuple_size(result_tpl)
 
-    [load_1,load_5,load_15] = [String.strip(elem(result_tpl, tuple_len-3)), 
-                               String.strip(elem(result_tpl, tuple_len-2)), 
-                               String.strip(elem(result_tpl,tuple_len-1))] 
-
-    final_result = %{load_1: Float.round(String.to_float(load_1)), 
-                     load_5: Float.round(String.to_float(load_5)), 
-                     load_15: Float.round(String.to_float(load_15))
+    final_result = %{load_1: String.strip(elem(result_tpl, tuple_len-3)), 
+                     load_5: String.strip(elem(result_tpl, tuple_len-2)),  
+                     load_15: String.strip(elem(result_tpl,tuple_len-1))
                     }
     {:ok, final_result }
    else
