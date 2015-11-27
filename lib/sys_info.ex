@@ -185,15 +185,12 @@ defmodule SysInfo do
     end
   end
 
-  defp test_zero(f) when f < 1 do 0 end
-  defp test_zero(f) do round(f) end
-
   defp convertUptime(seconds) do
     %{
-      y: (seconds / 60 / 60 / 24 / 365), 
-      d: (seconds / 60 / 60 / 24) |> test_zero() |> rem(365), 
-      h: (seconds / 3600) |> test_zero() |> rem(24), 
-      m: (seconds / 60) |> test_zero() |> rem(60), 
+      y: round((seconds / 60 / 60 / 24 / 365)), 
+      d: (seconds / 60 / 60 / 24) |> round() |> rem(365), 
+      h: (seconds / 3600) |> round() |> rem(24), 
+      m: (seconds / 60) |> round() |> rem(60), 
       s: seconds |> rem(60)
      }
   end
