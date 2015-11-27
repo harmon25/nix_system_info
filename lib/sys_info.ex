@@ -14,7 +14,6 @@ defmodule SysInfo do
       {:ok, "hostname"}
   
   """
-
   def hostname() do
     if OSUtils.is_unix? do
       result =  Porcelain.exec("hostname", ["-f"])
@@ -79,7 +78,7 @@ defmodule SysInfo do
   ## Examples:
 
       iex> SysInfo.uptime
-      {:ok, %{hours: a}}
+      {:ok, %{s: seconds, m: minutes, d: days, h:hours, y: years}}
 
   """
   def uptime() do
@@ -152,7 +151,7 @@ defmodule SysInfo do
           %{device: elem(diskInfo,0),
             type: elem(diskInfo,1), 
             size: String.to_integer(elem(diskInfo,2)), 
-            capacity: String.to_integer(String.rstrip(elem(diskInfo,5), "%")), 
+            capacity: elem(diskInfo,5), 
             mountpoint: elem(diskInfo,6)
            }
          end)
