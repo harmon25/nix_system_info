@@ -84,25 +84,14 @@ defmodule SysInfo do
   """
   def uptime() do
     if OSUtils.is_unix? do
-     result =  Porcelain.shell("uptime")
-     result_tpl = result.out |> String.strip() |> String.split(",") |> List.to_tuple()  
-     tuple_len = tuple_size(result_tpl)
-      cond do
-        tuple_len == 5 ->
-        # up for hours
-          hours = elem(result_tpl, 0) |> String.split() |> List.last()
-        {:ok , %{hours: hours} }
-        tuple_len == 6 ->
-        # up for days
-          hours = elem(result_tpl, 1) |> String.strip()
-          days = elem(result_tpl, 0)
-            |> String.replace("days", "")
-            |> String.split()
-            |> List.last()
-            |> String.strip()
-          final_result = %{hours: hours, days: days }
-          {:ok, final_result}
-      end
+     result =  Porcelain.shell("cat /proc/uptime")
+     uptime = result.out 
+        |> String.split()
+        |> hd()
+        |> String.to_float()
+        |> Float.floor()
+        |> convertUptime()
+      {:ok,  uptime}  
     else
        {:err, %{msg: @genericError}}
     end  
@@ -131,9 +120,9 @@ defmodule SysInfo do
                                String.strip(elem(result_tpl, tuple_len-2)), 
                                String.strip(elem(result_tpl,tuple_len-1))] 
 
-    final_result = %{load_1: Float.round(String.to_float(load_1) * 100), 
-                     load_5: Float.round(String.to_float(load_5)  * 100), 
-                     load_15: Float.round(String.to_float(load_15) * 100)
+    final_result = %{load_1: Float.round(String.to_float(load_1)), 
+                     load_5: Float.round(String.to_float(load_5)), 
+                     load_15: Float.round(String.to_float(load_15))
                     }
     {:ok, final_result }
    else
@@ -195,4 +184,18 @@ defmodule SysInfo do
       {:err, %{msg: @genericError}}
     end
   end
+
+  defp test_zero(f) when f < 0 do 0 end
+  defp test_zero(f) do f end
+
+  defp convertUptime(seconds) do
+    %{
+      y: seconds / 60 / 60 / 24 / 365, 
+      d: seconds / 60 / 60 / 24 |> test_zero() |> rem(365), 
+      h: seconds / 3600 |> test_zero() |> rem(24), 
+      m: seconds / 60 |> test_zero() |> rem(60), 
+      s: seconds |> rem(60)
+     }
+  end
+
 end
