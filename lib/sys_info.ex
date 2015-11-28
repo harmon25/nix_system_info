@@ -15,15 +15,7 @@ defmodule SysInfo do
   
   """
   def hostname() do
-    if OSUtils.is_unix? do
-      result =  Porcelain.exec("hostname", ["-f"])
-      final_result = result.out |> String.strip()
-      {:ok, final_result}
-    else
-      result =  Porcelain.exec("hostname", [])
-      final_result = result.out |> String.strip()
-      {:ok, final_result}
-    end
+    :inet.gethostname()
   end
   
   @doc """
